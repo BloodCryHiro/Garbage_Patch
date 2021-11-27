@@ -13,3 +13,19 @@ class Background(pygame.sprite.Sprite):
         self.image.blit(self.image_1, (WIN_WIDTH, 0))
         self.image.blit(self.image_2, (0, 0))
         self.rect = self.image.get_rect(midtop=(0, 0))
+        self.right_image = self.image_1
+
+    def switch(self):
+        if self.rect.right - WIN_WIDTH < 0:
+            if self.right_image == self.image_1:
+                self.image.blit(self.image_1, (0, 0))
+                self.image.blit(self.image_2, (WIN_WIDTH, 0))
+                self.right_image = self.image_2
+            else:
+                self.image.blit(self.image_1, (WIN_WIDTH, 0))
+                self.image.blit(self.image_2, (0, 0))
+                self.right_image = self.image_1
+            self.rect.left = 0
+
+    def update(self):
+        self.switch()

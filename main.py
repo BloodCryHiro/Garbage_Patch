@@ -5,7 +5,12 @@ from background import Background
 from sprites import SpriteManager
 
 
+def update(background_manager: SpriteManager):
+    background_manager.background_scroll()
+
+
 def render(background_group: GroupSingle):
+    background_group.update()
     background_group.draw(WINDOW_SURFACE)
 
     pygame.display.update()
@@ -14,6 +19,7 @@ def render(background_group: GroupSingle):
 def main():
     pygame.init()
     pygame.display.set_caption("Garbage Patch")
+    clock = pygame.time.Clock()
 
     sprite_manager = SpriteManager()
 
@@ -24,10 +30,13 @@ def main():
 
     isRunning = True
     while isRunning:
+        clock.tick(60)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 isRunning = False
 
+        update(sprite_manager)
         render(background_group)
 
     pygame.quit()
