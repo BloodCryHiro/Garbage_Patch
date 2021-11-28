@@ -21,3 +21,16 @@ class Shark(pygame.sprite.Sprite):
             self.rect.y -= 150
         elif pressed_key[pygame.K_DOWN] and not self.rect.center == (150, 500):
             self.rect.y += 150
+
+    def collision(self, target):
+        if target == "trash":
+            self.current_health -= 10
+            self.current_poison += 10
+        if target == "normal":
+            if self.current_health + 5 <= 100:
+                self.current_health += 5
+            self.current_poison += 5
+        if target == "poisoned":
+            self.current_poison += 15
+        self.health_ratio = self.current_health / self.max_health
+        self.poison_ratio = self.current_poison / self.max_poison

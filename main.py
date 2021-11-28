@@ -10,6 +10,28 @@ from sprites import SpriteManager
 from UI import UI
 
 
+def collision(shark_group: GroupSingle,
+              trash_group: Group,
+              normal_fish_group: Group,
+              poisoned_fish_group: Group) -> list:
+    shark_trash_collision_list = pygame.sprite.spritecollide(
+        shark_group.sprite, trash_group, True)
+    shark_normal_collision_list = pygame.sprite.spritecollide(
+        shark_group.sprite, normal_fish_group, True)
+    shark_poisoned_collision_list = pygame.sprite.spritecollide(
+        shark_group.sprite, poisoned_fish_group, True)
+
+    if shark_trash_collision_list:
+        # be invincible for a while
+        shark_group.sprite.collision("trash")
+    if shark_normal_collision_list:
+        UI.score += 10
+        shark_group.sprite.collision("normal")
+    if shark_poisoned_collision_list:
+        UI.score += 20
+        shark_group.sprite.collision("poisoned")
+
+
 def render(background_manager: SpriteManager,
            background_group: GroupSingle,
            shark_group: GroupSingle,
@@ -85,8 +107,10 @@ def main():
                     normal_fish_group.add(poisoned_fish)
                     sprite_manager.background_sprites.add(poisoned_fish)
 
-        render(sprite_manager, background_group, shark_group, trash_group,
-               normal_fish_group, poisoned_fish_group)
+        collision(shark_group, trash_group,
+                  normal_fish_group, poisoned_fish_group)
+        render(sprite_manager, background_group, shark_group,
+               trash_group, normal_fish_group, poisoned_fish_group)
 
     pygame.quit()
 
