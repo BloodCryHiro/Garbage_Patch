@@ -1,4 +1,5 @@
 import pygame
+from pygame.math import enable_swizzling
 from config import *
 
 
@@ -24,13 +25,22 @@ class Shark(pygame.sprite.Sprite):
 
     def collision(self, target):
         if target == "trash":
-            self.current_health -= 10
-            self.current_poison += 10
+            if self.current_poison - 10 <= 0 or self.current_poison + 10 >= 100:
+                pygame.event.post(pygame.event.Event(GAME_OVER))
+            else:
+                self.current_health -= 10
+                self.current_poison += 10
         if target == "normal":
-            if self.current_health + 5 <= 100:
-                self.current_health += 5
-            self.current_poison += 5
+            if self.current_poison + 15 >= 100:
+                pygame.event.post(pygame.event.Event(GAME_OVER))
+            else:
+                if self.current_health + 5 <= 100:
+                    self.current_health += 5
+                self.current_poison += 5
         if target == "poisoned":
-            self.current_poison += 15
+            if self.current_poison + 15 >= 100:
+                pygame.event.post(pygame.event.Event(GAME_OVER))
+            else:
+                self.current_poison += 15
         self.health_ratio = self.current_health / self.max_health
         self.poison_ratio = self.current_poison / self.max_poison

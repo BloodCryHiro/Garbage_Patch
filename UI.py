@@ -37,11 +37,24 @@ class UI:
             f"Score: {str(cls.score)}", True, WHITE)
         WINDOW_SURFACE.blit(score_word, (WIN_WIDTH - 220, 25))
 
-    time_count = 0
+    poin_time_count = 0
 
     @classmethod
-    def timer(cls):
-        cls.time_count += 1
-        if cls.time_count == 60:
-            cls.time_count = 0
+    def point_timer(cls):
+        cls.poin_time_count += 1
+        if cls.poin_time_count == 60:
+            cls.poin_time_count = 0
             cls.score += 1
+
+    @classmethod
+    def game_over(cls):
+        background = pygame.Surface((WIN_WIDTH, WIN_HEIGHT))
+        background.fill((50, 50, 50))
+        WINDOW_SURFACE.blit(background, (0, 0))
+
+        game_over_font = pygame.font.Font("Assets/Fonts/slkscre.ttf", 50)
+        game_over_word = game_over_font.render("Game Over", True, WHITE)
+        WINDOW_SURFACE.blit(game_over_word, (WIN_WIDTH / 2 - game_over_word.get_width() /
+                            2, WIN_HEIGHT / 2 - game_over_word.get_height() / 2))
+
+        pygame.display.update()

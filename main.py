@@ -81,14 +81,15 @@ def main():
     # TODO: Friquency will increase while time pass
     pygame.time.set_timer(SPAWN, 3000)
 
-    isRunning = True
-    while isRunning:
+    game_over = False
+    is_running = True
+    while is_running:
         clock.tick(60)
-        UI.timer()
+        UI.point_timer()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                isRunning = False
+                is_running = False
             if event.type == pygame.KEYDOWN:
                 pressed_key = pygame.key.get_pressed()
                 shark.movement(pressed_key)
@@ -106,11 +107,16 @@ def main():
                     poisoned_fish = PoisonedFish()
                     normal_fish_group.add(poisoned_fish)
                     sprite_manager.background_sprites.add(poisoned_fish)
+            if event.type == GAME_OVER:
+                game_over = True
 
-        collision(shark_group, trash_group,
-                  normal_fish_group, poisoned_fish_group)
-        render(sprite_manager, background_group, shark_group,
-               trash_group, normal_fish_group, poisoned_fish_group)
+        if not game_over:
+            collision(shark_group, trash_group,
+                      normal_fish_group, poisoned_fish_group)
+            render(sprite_manager, background_group, shark_group,
+                   trash_group, normal_fish_group, poisoned_fish_group)
+        else:
+            UI.game_over()
 
     pygame.quit()
 
