@@ -1,8 +1,10 @@
 import pygame
+from pygame import transform
 from pygame.sprite import Group, GroupSingle
 from config import *
 from background import Background
 from shark import Shark
+from trash import Trash
 from sprites import SpriteManager
 
 
@@ -10,9 +12,11 @@ def update(background_manager: SpriteManager):
     background_manager.background_scroll()
 
 
-def render(background_group: GroupSingle, shark_group: GroupSingle):
+def render(background_group: GroupSingle, shark_group: GroupSingle, trash_group: Group):
     background_group.update()
     background_group.draw(WINDOW_SURFACE)
+
+    trash_group.draw(WINDOW_SURFACE)
 
     shark_group.draw(WINDOW_SURFACE)
 
@@ -35,6 +39,10 @@ def main():
     shark_group = pygame.sprite.GroupSingle()
     shark_group.add(shark)
 
+    trash_group = pygame.sprite.Group()
+
+    pygame.time.set_timer(TRASH_SPAWN, 3000)
+
     isRunning = True
     while isRunning:
         clock.tick(60)
@@ -45,9 +53,13 @@ def main():
             if event.type == pygame.KEYDOWN:
                 pressed_key = pygame.key.get_pressed()
                 shark.movement(pressed_key)
+            if event.type == TRASH_SPAWN:
+                trash = Trash()
+                trash_group.add(trash)
+                sprite_manager.background_sprites.add(trash)
 
         update(sprite_manager)
-        render(background_group, shark_group)
+        render(background_group, shark_group, trash_group)
 
     pygame.quit()
 
