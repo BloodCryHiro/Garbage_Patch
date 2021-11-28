@@ -7,13 +7,18 @@ from fish import NormalFish, PoisonedFish
 from shark import Shark
 from trash import Trash
 from sprites import SpriteManager
+from UI import UI
 
 
-def update(background_manager: SpriteManager):
+def render(background_manager: SpriteManager,
+           background_group: GroupSingle,
+           shark_group: GroupSingle,
+           trash_group: Group,
+           normal_fish_group: Group,
+           poisoned_fish_group: Group):
+
     background_manager.background_scroll()
 
-
-def render(background_group: GroupSingle, shark_group: GroupSingle, trash_group: Group, normal_fish_group: Group, poisoned_fish_group: Group):
     background_group.update()
     background_group.draw(WINDOW_SURFACE)
 
@@ -22,7 +27,10 @@ def render(background_group: GroupSingle, shark_group: GroupSingle, trash_group:
     normal_fish_group.draw(WINDOW_SURFACE)
     poisoned_fish_group.draw(WINDOW_SURFACE)
 
+    shark_group.update()
     shark_group.draw(WINDOW_SURFACE)
+
+    UI.health_poison_bar_render(shark_group.sprite)
 
     pygame.display.update()
 
@@ -75,8 +83,7 @@ def main():
                     normal_fish_group.add(poisoned_fish)
                     sprite_manager.background_sprites.add(poisoned_fish)
 
-        update(sprite_manager)
-        render(background_group, shark_group, trash_group,
+        render(sprite_manager, background_group, shark_group, trash_group,
                normal_fish_group, poisoned_fish_group)
 
     pygame.quit()
