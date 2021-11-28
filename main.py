@@ -30,7 +30,8 @@ def render(background_manager: SpriteManager,
     shark_group.update()
     shark_group.draw(WINDOW_SURFACE)
 
-    UI.health_poison_bar_render(shark_group.sprite)
+    UI.display_health_poison_bar(shark_group.sprite)
+    UI.display_score()
 
     pygame.display.update()
 
@@ -55,12 +56,13 @@ def main():
     normal_fish_group = pygame.sprite.Group()
     poisoned_fish_group = pygame.sprite.Group()
 
-    # TODO: Friquency will change while time pass
+    # TODO: Friquency will increase while time pass
     pygame.time.set_timer(SPAWN, 3000)
 
     isRunning = True
     while isRunning:
         clock.tick(60)
+        UI.timer()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
