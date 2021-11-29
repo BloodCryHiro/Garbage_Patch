@@ -105,6 +105,14 @@ class UI:
         game_over_font = pygame.font.Font("Assets/Fonts/slkscre.ttf", 50)
         game_over_word = game_over_font.render("Game Over", True, WHITE)
         WINDOW_SURFACE.blit(game_over_word, (WIN_WIDTH / 2 - game_over_word.get_width() /
-                            2, WIN_HEIGHT / 2 - game_over_word.get_height() / 2))
+                            2, 150))
+
+        restart_button = Button(WHITE, (game_over_word.get_width() * 0.7, 40), ((
+            WIN_WIDTH - game_over_word.get_width() * 0.7) / 2, WIN_HEIGHT / 2), 30, "Restart", BLACK)
+        restart_button.draw()
+
+        exit_button = Button(WHITE, (game_over_word.get_width(
+        ) * 0.7, 40), (restart_button.background_rect.x, restart_button.background_rect.y + 60), 30, "Exit", BLACK)
+        exit_button.draw()
 
         pygame.display.update()
