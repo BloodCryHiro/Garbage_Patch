@@ -7,13 +7,14 @@ from fish import NormalFish, PoisonedFish
 from shark import Shark
 from trash import Trash
 from sprites import SpriteManager
-from UI import UI
+from UI import UI, Button
 
 
 def collision(shark_group: GroupSingle,
               trash_group: Group,
               normal_fish_group: Group,
               poisoned_fish_group: Group) -> list:
+
     shark_trash_collision_list = pygame.sprite.spritecollide(
         shark_group.sprite, trash_group, True)
     shark_normal_collision_list = pygame.sprite.spritecollide(
@@ -32,14 +33,14 @@ def collision(shark_group: GroupSingle,
         shark_group.sprite.collision("poisoned")
 
 
-def render(background_manager: SpriteManager,
-           background_group: GroupSingle,
+def render(background_group: GroupSingle,
            shark_group: GroupSingle,
            trash_group: Group,
            normal_fish_group: Group,
            poisoned_fish_group: Group):
 
-    background_manager.background_scroll()
+    SpriteManager.background_scroll()
+    SpriteManager.sprite_recycle()
 
     background_group.update()
     background_group.draw(WINDOW_SURFACE)
@@ -63,12 +64,10 @@ def main():
     pygame.display.set_caption("Garbage Patch")
     clock = pygame.time.Clock()
 
-    sprite_manager = SpriteManager()
-
     background = Background()
     background_group = pygame.sprite.GroupSingle()
     background_group.add(background)
-    sprite_manager.background_sprites.add(background)
+    SpriteManager.background_sprites.add(background)
 
     shark = Shark()
     shark_group = pygame.sprite.GroupSingle()
@@ -81,7 +80,8 @@ def main():
     # TODO: Friquency will increase while time pass
     pygame.time.set_timer(SPAWN, 3000)
 
-    game_over = False
+    start_menu = True
+    main_game = False
     is_running = True
     while is_running:
         clock.tick(60)
@@ -93,27 +93,38 @@ def main():
             if event.type == pygame.KEYDOWN:
                 pressed_key = pygame.key.get_pressed()
                 shark.movement(pressed_key)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    mouse_position = pygame.mouse.get_pos()
+                    button: Button
+                    for button in Button.buttons_list:
+                        button.click(mouse_position)
             if event.type == SPAWN:
                 choice = random.choice(["trash", "normal", "poisoned"])
                 if choice == "trash":
                     trash = Trash()
                     trash_group.add(trash)
-                    sprite_manager.background_sprites.add(trash)
+                    SpriteManager.background_sprites.add(trash)
                 elif choice == "normal":
                     normal_fish = NormalFish()
                     normal_fish_group.add(normal_fish)
-                    sprite_manager.background_sprites.add(normal_fish)
+                    SpriteManager.background_sprites.add(normal_fish)
                 elif choice == "poisoned":
                     poisoned_fish = PoisonedFish()
                     normal_fish_group.add(poisoned_fish)
-                    sprite_manager.background_sprites.add(poisoned_fish)
+                    SpriteManager.background_sprites.add(poisoned_fish)
+            if event.type == ENTER_GAME:
+                start_menu = False
+                main_game = True
             if event.type == GAME_OVER:
-                game_over = True
+                main_game = False
 
-        if not game_over:
+        if start_menu:
+            UI.start_menu()
+        elif main_game:
             collision(shark_group, trash_group,
                       normal_fish_group, poisoned_fish_group)
-            render(sprite_manager, background_group, shark_group,
+            render(background_group, shark_group,
                    trash_group, normal_fish_group, poisoned_fish_group)
         else:
             UI.game_over()
