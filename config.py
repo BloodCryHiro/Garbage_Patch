@@ -11,6 +11,7 @@ WINDOW_SURFACE = pygame.display.set_mode((WIN_WIDTH, WIN_HEIGHT))
 SPAWN = pygame.USEREVENT + 1
 ENTER_GAME = pygame.USEREVENT + 2
 GAME_OVER = pygame.USEREVENT + 3
+RESTART_GAME = pygame.USEREVENT + 4
 
 
 def center(outer: Surface, inner: Surface):

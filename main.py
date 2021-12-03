@@ -114,6 +114,11 @@ def main():
                 main_game = True
             if event.type == GAME_OVER:
                 main_game = False
+            if event.type == RESTART_GAME:
+                main_game = True
+                UI.restart()
+                SpriteManager.restart()
+                shark.restart()
 
         if start_menu:
             UI.start_menu()

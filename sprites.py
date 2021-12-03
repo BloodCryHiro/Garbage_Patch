@@ -33,3 +33,10 @@ class SpriteManager:
         cls.level_timer += 1
         cls.level = cls.level_timer // (60 * 20)
         cls.scroll_speed = 5 + cls.level * 3
+
+    @classmethod
+    def restart(cls):
+        cls.spawner_timer = 0
+        cls.level = 1
+        cls.level_timer = 0
+        cls.scroll_speed = 5 * cls.level

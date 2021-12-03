@@ -29,10 +29,16 @@ class Button:
                 pygame.event.post(pygame.event.Event(ENTER_GAME))
             elif self.content == "Exit":
                 pygame.event.post(pygame.event.Event(pygame.QUIT))
+            elif self.content == "Restart":
+                pygame.event.post(pygame.event.Event(RESTART_GAME))
 
 
 class UI:
     pygame.font.init()
+
+    score = 0
+
+    point_time_count = 0
 
     @ classmethod
     def display_health_poison_bar(cls, shark: Shark):
@@ -56,16 +62,12 @@ class UI:
         WINDOW_SURFACE.blit(max_poison_bar, (60, 50))
         WINDOW_SURFACE.blit(current_poison_bar, (60, 50))
 
-    score = 0
-
     @ classmethod
     def display_score(cls):
         score_font = pygame.font.Font("Assets/Fonts/slkscre.ttf", 30)
         score_word = score_font.render(
             f"Score: {str(cls.score)}", True, WHITE)
         WINDOW_SURFACE.blit(score_word, (WIN_WIDTH - 220, 25))
-
-    point_time_count = 0
 
     @ classmethod
     def point_timer(cls):
@@ -116,3 +118,8 @@ class UI:
         exit_button.draw()
 
         pygame.display.update()
+
+    @classmethod
+    def restart(cls):
+        cls.score = 0
+        cls.point_time_count = 0

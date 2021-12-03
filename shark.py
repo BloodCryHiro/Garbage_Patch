@@ -25,7 +25,8 @@ class Shark(pygame.sprite.Sprite):
 
     def collision(self, target):
         if target == "trash":
-            self.current_health -= 20
+            # ! temp
+            self.current_health -= 100
             self.current_poison += 10
         if target == "normal":
             if self.current_health + 5 <= 100:
@@ -47,6 +48,12 @@ class Shark(pygame.sprite.Sprite):
     def death(self):
         if self.current_health <= 0 or self.current_poison >= 100:
             pygame.event.post(pygame.event.Event(GAME_OVER))
+
+    def restart(self):
+        self.current_health = 100
+        self.health_ratio = self.current_health / self.max_health
+        self.current_poison = 0
+        self.poison_ratio = self.current_poison / self.max_poison
 
     def update(self):
         self.poison_decay()
